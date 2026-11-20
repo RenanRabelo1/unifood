@@ -6,8 +6,8 @@ Todos os serviços expõem `GET /health`.
 
 | Serviço | Linguagem | Banco | Porta local | Responsável |
 |---|---|---|---|---|
-| usuarios-service | Java 17 / Spring Boot | MongoDB (`usuarios_db`) | 8081 | Renan |
-| produtos-service | Java 17 / Spring Boot | MongoDB (`produtos_db`) | 8082 | Renan |
+| servicos/usuarios-service | Java 17 / Spring Boot | MongoDB (`usuarios_db`) | 8081 | Renan |
+| servicos/produtos-service | Java 17 / Spring Boot | MongoDB (`produtos_db`) | 8082 | Renan |
 | pedidos-service | Node.js / Express | MySQL (`pedidos_db`) | 3001 | (amigo) |
 | pagamentos-service | Node.js / Express | MySQL (`pagamentos_db`) | 3002 | (amigo) |
 | frontend | React (Vite) | — | 5173 | Renan |
@@ -100,8 +100,8 @@ Todas validam o token em `GET {USUARIOS_URL}/auth/validar`.
 
 | Serviço | Variáveis |
 |---|---|
-| usuarios-service | `MONGODB_URI`, `JWT_SECRET`, `PORT` |
-| produtos-service | `MONGODB_URI`, `USUARIOS_URL`, `PORT` |
+| servicos/usuarios-service | `MONGODB_URI`, `JWT_SECRET`, `PORT` |
+| servicos/produtos-service | `MONGODB_URI`, `USUARIOS_URL`, `PORT` |
 | pedidos-service | `DATABASE_URL` (MySQL), `USUARIOS_URL`, `PRODUTOS_URL`, `PAGAMENTOS_URL`, `PORT` |
 | pagamentos-service | `DATABASE_URL` (MySQL), `USUARIOS_URL`, `PORT` |
 | frontend | `VITE_USUARIOS_URL`, `VITE_PRODUTOS_URL`, `VITE_PEDIDOS_URL`, `VITE_PAGAMENTOS_URL` |

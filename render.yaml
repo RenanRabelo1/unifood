@@ -4,7 +4,7 @@ services:
   - type: web
     name: unifood-usuarios
     runtime: docker
-    rootDir: usuarios-service
+    rootDir: servicos/usuarios-service
     plan: free
     healthCheckPath: /health
     envVars:
@@ -16,7 +16,7 @@ services:
   - type: web
     name: unifood-produtos
     runtime: docker
-    rootDir: produtos-service
+    rootDir: servicos/produtos-service
     plan: free
     healthCheckPath: /health
     envVars:
