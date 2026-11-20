@@ -1,0 +1,28 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec)
+# Render > New > Blueprint > selecione este repositório.
+services:
+  - type: web
+    name: unifood-usuarios
+    runtime: docker
+    rootDir: usuarios-service
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        sync: false          # mongodb+srv://.../usuarios_db  (MongoDB Atlas)
+      - key: JWT_SECRET
+        generateValue: true
+
+  - type: web
+    name: unifood-produtos
+    runtime: docker
+    rootDir: produtos-service
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        sync: false          # mongodb+srv://.../produtos_db  (MongoDB Atlas)
+      - key: USUARIOS_URL
+        sync: false          # https://unifood-usuarios.onrender.com
+
+  # pedidos-service e pagamentos-service (Node + MySQL) serão adicionados pelo colega.
