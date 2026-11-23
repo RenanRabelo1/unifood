@@ -7,7 +7,6 @@ outro aluno faz o pedido, escolhe entrega ou retirada e registra o pagamento.
 
 - Arquitetura, camadas, SOLID e GRASP: [`docs/arquitetura.md`](docs/arquitetura.md)
 - Contrato de rotas entre os serviços: [`docs/API.md`](docs/API.md)
-- Diagrama (versão em PDF): [`docs/diagrama-unifood.pdf`](docs/diagrama-unifood.pdf)
 
 ## Estrutura do repositório
 
