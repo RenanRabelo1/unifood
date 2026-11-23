@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProdutoForm, { PRODUTO_VAZIO } from '../components/produtos/ProdutoForm.jsx'
+import ImagemProduto from '../components/ui/ImagemProduto.jsx'
 import { produtosService } from '../services/produtosService.js'
 import { formatarMoeda } from '../utils/formatadores.js'
 
@@ -48,9 +49,12 @@ export default function MeusProdutosPage({ notificar }) {
         {produtos.length === 0 && <p className="vazio">Você ainda não cadastrou produtos.</p>}
         {produtos.map((p) => (
           <div key={p.id} className="card linha">
-            <div>
+            <div className="com-miniatura">
+              <ImagemProduto key={p.imagemUrl} url={p.imagemUrl} alt={p.nome} className="miniatura" />
+              <span>
               <strong>{p.nome}</strong> — {formatarMoeda(p.preco)} · {p.bloco}{' '}
               {!p.disponivel && <span className="tag">indisponível</span>}
+              </span>
             </div>
             <div className="acoes">
               <button className="link" onClick={() => setEmEdicao(p)}>Editar</button>

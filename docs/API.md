@@ -8,8 +8,8 @@ Todos os serviços expõem `GET /health`.
 |---|---|---|---|---|
 | servicos/usuarios-service | Java 17 / Spring Boot | MongoDB (`usuarios_db`) | 8081 | Renan |
 | servicos/produtos-service | Java 17 / Spring Boot | MongoDB (`produtos_db`) | 8082 | Renan |
-| pedidos-service | Node.js / Express | MySQL (`pedidos_db`) | 3001 | (amigo) |
-| pagamentos-service | Node.js / Express | MySQL (`pagamentos_db`) | 3002 | (amigo) |
+| servicos/pedidos-service | Node.js / Express | MySQL (`pedidos_db`) | 3001 | Ziltom |
+| servicos/pagamentos-service | Node.js / Express | MySQL (`pagamentos_db`) | 3002 | Ziltom |
 | frontend | React (Vite) | — | 5173 | Renan |
 
 ---
@@ -41,7 +41,7 @@ Todos os serviços expõem `GET /health`.
 
 ---
 
-## 3. Pedidos (Node + MySQL) — A FAZER pelo colega
+## 3. Pedidos (Node + MySQL) — PRONTO
 
 O frontend já chama estas rotas exatamente assim:
 
@@ -70,6 +70,13 @@ Fluxo do `POST /pedidos`:
 4. Calcula `total = Σ preco × quantidade` (o preço vem do serviço de Produtos, **nunca do frontend**).
 5. Salva no MySQL com `status = "PENDENTE"`.
 6. `POST {PAGAMENTOS_URL}/pagamentos` repassando o Authorization, body `{ pedidoId, valor: total, metodo: metodoPagamento, vendedorId }`.
+   Se o pagamento não puder ser registrado, o pedido é marcado `CANCELADO` e a resposta é **503**.
+
+Regras adicionais: na `RETIRADA` o bloco é sempre o do produto (o `blocoEncontro` enviado é ignorado) e todos os itens precisam estar no mesmo bloco; itens repetidos do mesmo produto são somados.
+
+**Status:** `PENDENTE → CONFIRMADO → PRONTO → ENTREGUE`. Só o vendedor avança, um passo por vez (fora de ordem → 409). `CANCELADO`: comprador ou vendedor, até o pedido ser entregue.
+
+**Erros:** 400 dados inválidos · 401 token · 403 sem permissão (ex.: ver pedido alheio) · 404 não encontrado · 409 mudança de status inválida · 503 outro serviço fora do ar.
 
 `Pedido` (resposta):
 ```json
@@ -83,7 +90,7 @@ Fluxo do `POST /pedidos`:
 
 Sugestão de tabelas MySQL: `pedidos(id, comprador_id, comprador_nome, vendedor_id, vendedor_nome, total, tipo_entrega, bloco_encontro, status, criado_em)` e `itens_pedido(id, pedido_id, produto_id, nome, preco_unitario, quantidade)`.
 
-## 4. Pagamentos (Node + MySQL) — A FAZER pelo colega
+## 4. Pagamentos (Node + MySQL) — PRONTO (pagamento simulado)
 
 | Método | Rota | Auth | Descrição |
 |---|---|---|---|
@@ -96,12 +103,18 @@ Todas validam o token em `GET {USUARIOS_URL}/auth/validar`.
 
 `Pagamento = { id, pedidoId, compradorId, vendedorId, valor, metodo, status, criadoEm, confirmadoEm }`
 
+O pagamento é **simulado**: não há cobrança real. O vendedor confirma quando recebe o valor combinado.
+
+Regras: um pedido tem só um pagamento (409 se repetir); o comprador é sempre o dono do token; só o vendedor confirma; comprador ou vendedor cancelam; `CONFIRMADO` e `CANCELADO` são finais (409 se tentar mudar). Os endpoints de consulta e alteração só aceitam o comprador ou o vendedor (403 para os outros).
+
+**Erros:** 400 dados inválidos · 401 token · 403 sem permissão · 404 não encontrado · 409 conflito de estado · 503 Usuários fora do ar.
+
 ## Variáveis de ambiente
 
 | Serviço | Variáveis |
 |---|---|
 | servicos/usuarios-service | `MONGODB_URI`, `JWT_SECRET`, `PORT` |
 | servicos/produtos-service | `MONGODB_URI`, `USUARIOS_URL`, `PORT` |
-| pedidos-service | `DATABASE_URL` (MySQL), `USUARIOS_URL`, `PRODUTOS_URL`, `PAGAMENTOS_URL`, `PORT` |
-| pagamentos-service | `DATABASE_URL` (MySQL), `USUARIOS_URL`, `PORT` |
+| servicos/pedidos-service | `DATABASE_URL` (MySQL), `DB_SSL`, `USUARIOS_URL`, `PRODUTOS_URL`, `PAGAMENTOS_URL`, `CORS_ORIGENS`, `PORT` |
+| servicos/pagamentos-service | `DATABASE_URL` (MySQL), `DB_SSL`, `USUARIOS_URL`, `CORS_ORIGENS`, `PORT` |
 | frontend | `VITE_USUARIOS_URL`, `VITE_PRODUTOS_URL`, `VITE_PEDIDOS_URL`, `VITE_PAGAMENTOS_URL` |

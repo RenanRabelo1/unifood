@@ -14,8 +14,8 @@ unifood/
 ├── servicos/
 │   ├── usuarios-service/      Java 17 · Spring Boot · MongoDB (usuarios_db)    — Renan
 │   ├── produtos-service/      Java 17 · Spring Boot · MongoDB (produtos_db)    — Renan
-│   ├── pedidos-service/       Node.js · Express · MySQL (pedidos_db)           — (colega)
-│   └── pagamentos-service/    Node.js · Express · MySQL (pagamentos_db)        — (colega)
+│   ├── pedidos-service/       Node.js · Express · MySQL (pedidos_db)           — Ziltom
+│   └── pagamentos-service/    Node.js · Express · MySQL (pagamentos_db)        — Ziltom
 ├── frontend/                  React (Vite) — conecta todos os serviços         — Renan
 ├── docs/                      arquitetura, contrato de API, diagrama
 └── render.yaml                deploy dos serviços no Render
@@ -34,12 +34,22 @@ MONGODB_URI="mongodb://localhost:27017/usuarios_db" mvn spring-boot:run
 cd servicos/produtos-service
 MONGODB_URI="mongodb://localhost:27017/produtos_db" USUARIOS_URL=http://localhost:8081 mvn spring-boot:run
 
+# Pagamentos (porta 3002) — Node.js + MySQL; pagamento simulado, nada é cobrado de verdade
+cd servicos/pagamentos-service
+cp .env.example .env   # ajuste DATABASE_URL e USUARIOS_URL
+npm install && npm run dev
+
+# Pedidos (porta 3001) — Node.js + MySQL; precisa de Usuários e Produtos no ar
+cd servicos/pedidos-service
+cp .env.example .env   # ajuste DATABASE_URL e as URLs dos serviços
+npm install && npm run dev
+
 # Frontend (porta 5173)
 cd frontend
 cp .env.example .env && npm install && npm run dev
 ```
 
-Testes: `mvn test` dentro de cada serviço Java.
+Testes: `mvn test` nos serviços Java; `npm test` em `pedidos-service` e `pagamentos-service`.
 
 ## Implantação na nuvem
 

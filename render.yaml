@@ -25,4 +25,34 @@ services:
       - key: USUARIOS_URL
         sync: false          # https://unifood-usuarios.onrender.com
 
-  # pedidos-service e pagamentos-service (Node + MySQL) serão adicionados pelo colega.
+  - type: web
+    name: unifood-pedidos
+    runtime: docker
+    rootDir: servicos/pedidos-service
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # mysql://usuario:senha@host:3306/pedidos_db  (MySQL na nuvem)
+      - key: DB_SSL
+        value: "true"        # tire se o seu MySQL não usar SSL
+      - key: USUARIOS_URL
+        sync: false          # https://unifood-usuarios.onrender.com
+      - key: PRODUTOS_URL
+        sync: false          # https://unifood-produtos.onrender.com
+      - key: PAGAMENTOS_URL
+        sync: false          # https://unifood-pagamentos.onrender.com
+
+  - type: web
+    name: unifood-pagamentos
+    runtime: docker
+    rootDir: servicos/pagamentos-service
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # mysql://usuario:senha@host:3306/pagamentos_db  (MySQL na nuvem)
+      - key: DB_SSL
+        value: "true"        # tire se o seu MySQL não usar SSL
+      - key: USUARIOS_URL
+        sync: false          # https://unifood-usuarios.onrender.com
