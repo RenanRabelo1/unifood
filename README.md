@@ -3,9 +3,11 @@
 Marketplace de lanches entre alunos do campus: um aluno cadastra produtos com o bloco de retirada,
 outro aluno faz o pedido, escolhe entrega ou retirada e registra o pagamento.
 
+![Arquitetura de microsserviços do UniFood](docs/diagrama-unifood.png)
+
 - Arquitetura, camadas, SOLID e GRASP: [`docs/arquitetura.md`](docs/arquitetura.md)
 - Contrato de rotas entre os serviços: [`docs/API.md`](docs/API.md)
-- Diagrama: [`docs/diagrama-unifood.pdf`](docs/diagrama-unifood.pdf)
+- Diagrama (versão em PDF): [`docs/diagrama-unifood.pdf`](docs/diagrama-unifood.pdf)
 
 ## Estrutura do repositório
 
